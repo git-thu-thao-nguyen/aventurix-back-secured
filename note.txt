@@ -1,0 +1,140 @@
+[ Frontend (React + Tailwind + ShadCN + Redux Toolkit) ]
+
+         ↓  Axios (interceptors, requêtes HTTPS)
+
+[ Backend (Node + Express + Middlewares + Auth + Stripe) ]
+
+         ↓  Mongoose (ODM)
+
+[ Database (MongoDB - Atlas / Compass) ]
+
+
+
+
+MVC : 
+[ Front ] : requête HTTP (GET, POST, PUT, PATCH, DELETE..)
+        ↓ 
+────────────────────────────────
+[ Routes ] : définit l’URL + choisit le contrôleur
+        ↓
+[ Controller ] : Contient la logique métier
+        ↓
+[ Model ] : Gère les données (BDD via Mongoose)
+        ↓
+Réponse HTTP (JSON)
+────────────────────────────────
+[ Front ] : Affiche la réponse (UI)
+
+
+
+Express (req / res / next()) :
+[ Utilisateur ]
+        ↓  
+      req = requête HTTP = infos envoyées (body, params, query, headers…)
+        ↓
+[ Middleware / Contrôleur Express (req, res, next) ]
+        ↓
+      next() → Passe au middleware / contrôleur suivant
+        ↓
+      res = réponse HTTP (status, JSON, texte…)
+        ↓
+[ Utilisateur ]
+
+
+
+
+JWT : 
+[ Utilisateur ]
+     ↓ (login : email + mot de passe)
+[ Serveur Auth (Node / Express) ]
+     ↓
+Vérifie le user en BDD (bcrypt.compare)
+     ↓
+Crée un JWT signé (id, email, rôle...) + expiresIn
+     ↓
+Renvoie le token au front
+--------------------------------------------
+[ Front (React) ]
+     ↓
+Stocke le token (ex: localStorage ou cookies)
+     ↓
+Envoie le token dans chaque requête (headers: Authorization: Bearer <token>)
+--------------------------------------------
+[ Serveur API protégée ]
+     ↓
+🔍 Vérifie le token avec jwt.verify()
+     ↓
+✅ Si valide → autorise la requête
+❌ Si expiré / invalide → renvoie 401 (Unauthorized)
+
+
+
+
+
+Stripe :
+[ Front ]
+   │  POST /pay { order, items }
+   ▼
+[ Back ]
+   │  → Crée une Checkout Session Stripe (infos paiement + success_url + cancel_url)
+   │  → Reçoit session.url et le renvoie au Front
+   ▼
+[ Front ]
+   │  → Redirige l’utilisateur vers session.url
+   ▼
+[ Stripe Checkout ]
+   │  → Affiche la page → l’utilisateur paie ou annule
+   ▼
+[ Stripe renvoie automatiquement vers ]
+   ├─ ✅ success_url  (paiement réussi)
+   └─ ❌ cancel_url   (paiement annulé)
+
+
+
+   
+XSS (Cross-Site Scripting) :
+1. Sans xss-clean
+[ Client malveillant ] → envoie du code JS caché dans un champ (formulaire, commentaire, etc.)
+     ↓
+[ Serveur ] → enregistre ce code sans le filtrer
+     ↓
+[ Autre utilisateur ] → ⚠️ charge la page → le code JS s’exécute dans son navigateur !
+     ↓
+Résultat : Le pirate peut voler des cookies, des tokens JWT, ou rediriger l’utilisateur vers un faux site.
+
+2. Avec xss-clean
+[ Client ] → formulaire : "comment": "<script>hack()</script>"
+        ↓
+[ Serveur ] → reçoit la requête
+        ↓
+xss-clean intercepte et nettoie : "<script>" → "&lt;script&gt;"
+        ↓
+[ Serveur ] → enregistre ou renvoie les données propres
+        ↓
+[ Navigateur ] → n’exécute pas de script malveillant
+
+
+
+Helmet : 
+[ Requête navigateur ]
+        ↓
+[ Express + Helmet ] → Helmet ajoute des headers de sécurité dans les réponses HTTP par ex :
+        ↓
+    X-Frame-Options: SAMEORIGIN
+    X-Content-Type-Options: nosniff
+    Strict-Transport-Security: max-age=15552000 ...
+        ↓
+[ Navigateur ] → lit et applique ces règles de sécurité
+
+
+
+express-mongo-sanitize :
+[ Requête du client ] → injecte des opérateurs MongoDB ($, .) pour manipuler/contourner les requêtes de bdd
+     ↓
+  { "$gt": "", "user": "admin" }
+     ↓
+[ express-mongo-sanitize ] → supprime/neutralise les clés contenant '$' ou '.' dans req.body / query / params
+     ↓
+  { "user": "admin" }
+     ↓
+[ Requête MongoDB sécurisée ]

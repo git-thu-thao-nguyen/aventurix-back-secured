@@ -1,0 +1,31 @@
+const mongoose = require("mongoose");
+
+const mongoUriAtlas = ``;
+const mongoUriLocalhost = `mongodb://localhost:27017/aventurix`;
+const dbName = "aventurix";
+
+let mongoUri = ``;
+
+const connectToDatabase = async () => {
+
+	if (process.env.NODE_ENV === "production") {
+		mongoUri = mongoUriAtlas;
+	} else {
+		mongoUri = mongoUriLocalhost;
+	}
+
+	try {
+		await mongoose.connect(mongoUri, {
+			dbName: dbName,
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			tls: process.env.NODE_ENV === "production",
+		});
+		console.log("Connecting to database successful");
+	} catch (error) {
+		console.log("Error connecting to database", error);
+	}
+
+}
+
+module.exports = connectToDatabase;
