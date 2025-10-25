@@ -60,7 +60,7 @@ app.locals.uploader = multer({
 // Config rate limit :
 const limitOptions = {
     windowMs: 15 * 60 * 1000, // fenêtre de temps : 15 minutes
-    max: 100, // nombre maximum de requêtes autorisées par IP pendant la fenêtre de temps
+    max: 1000, // nombre maximum de requêtes autorisées par IP pendant la fenêtre de temps
     handler: (req, res) => {
         // si limite dépassée → renvoie une erreur 429
         res.status(StatusCodes.TOO_MANY_REQUESTS).json({ status: 429, error: "Too many requests" });

@@ -71,7 +71,7 @@ const addImage = async (req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Error get adviser. Failure.");
     }
 
-    // on vérifier qu'on a bien un fichier et qu'on a bien un advisor qui contient quelque chose
+    // on vérifier qu'on a bien un fichier et qu'on a bien un adviser qui contient quelque chose
     if (!file || Object.keys(adviser).length === 0) {
         return res.status(StatusCodes.BAD_REQUEST).send("No upload. Failure.");
     }

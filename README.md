@@ -11,7 +11,7 @@
 
 Bienvenue sur **Aventurix** — application web complète (Front + Back) permettant la gestion et la réservation de voyages.
 
-Architecture MERN avec une intégration Stripe pour les paiements et un système d’authentification JWT sécurisé.
+Architecture MERN avec une intégration Stripe pour les paiements et un système d'authentification JWT sécurisé.
 
 Auteure : Thu Thao NGUYEN  
 
@@ -22,22 +22,22 @@ Auteure : Thu Thao NGUYEN
 
 ```
 En local (Dev)
-┌────────────┐
-│ React → UI        → localhost:5173
-└──────┬─────┘
-       │
-┌──────▼──────┐
-│ Node → API        → localhost:3000
+┌─────────────┐
+│ React → UI            → localhost:5173
 └──────┬──────┘
        │
 ┌──────▼──────┐
-│ MongoDB → DB      → localhost:27017
+│ Node → API/Server     → localhost:3000
+└──────┬──────┘
+       │
+┌──────▼──────┐
+│ MongoDB → DB          → localhost:27017
 └─────────────┘
 
 En production (Cloud)
-┌────────────┐     ┌────────────┐     ┌────────────┐
-│ Netlify → UI      Vercel → API        Atlas → DB
-└────────────┘     └────────────┘     └────────────┘
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│ Netlify → UI     Vercel → API/Server       Atlas → DB
+└─────────────┘      └─────────────┘      └─────────────┘
 ```
 
 
@@ -63,7 +63,7 @@ En production (Cloud)
       5) body-parser / express.json()     → lecture du corps des requêtes (JSON / formulaires)
       6) xss-clean                        → nettoie les entrées contre les attaques XSS
       7) express-mongo-sanitize           → enlève les opérateurs MongoDB injectés ($, .)
-      8) multer                           → gère l’upload de fichiers (FormData)
+      8) multer                           → gère l'upload de fichiers (FormData)
       9) express-validator                → valide les champs (req.body, params…)
             │
             ▼
@@ -82,5 +82,5 @@ En production (Cloud)
             │ Réponse JSON
             ▼
 ──────────────────────────────────────────────────────────────
-[ FRONT ] : Axios intercepte la réponse → met à jour l’UI React
+[ FRONT ] : Axios intercepte la réponse → met à jour l'UI React
 ```

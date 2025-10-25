@@ -49,7 +49,7 @@ const createStripeSession = async (req, res) => {
                 process.env.NODE_ENV === "production"
                     ? `${process.env.CLIENT_URL_PROD}/checkout-success`
                     : `${process.env.CLIENT_URL_LOCAL}/checkout-success`,
-            success_url:
+            cancel_url:
                 process.env.NODE_ENV === "production" ? `${process.env.CLIENT_URL_PROD}/checkout` : `${process.env.CLIENT_URL_LOCAL}/checkout`,
         });
 

@@ -61,7 +61,7 @@ const login = async (req, res) => {
                 email: foundUser.email
             },
             jwtSecretKey,
-            { expiresIn: "1h" } // Après 1h, token devient invalide et l’utilisateur doit se reconnecter.
+            { expiresIn: "24h" } // Après 24h, token devient invalide et l’utilisateur doit se reconnecter.
         )
 
         // supprimer les champs sensibles de l'user
