@@ -46,9 +46,9 @@ app.use(mongoSanitize({ replaceWith: "_" })); // remplace les opérateurs MongoD
 
 // Vercel
 app.set("trust proxy", 1); // indique à Express d'accepter les infos du proxy (Vercel)
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../public"))); // autorise Express à servir automatiquement tous les fichiers présents dans le dossier /public
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/index.html"));
+    res.sendFile(path.join(__dirname, "../public/index.html")); // route d'accueil "/" → on renvoie le fichier index.html en réponse
 });
 
 // Config multer :

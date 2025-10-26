@@ -3,4 +3,6 @@
 
 const app = require("./api/index.js");
 const port = 3000;
+
+// Se connecter au serveur local
 app.listen(port, () => console.log("Local server running on port", port));

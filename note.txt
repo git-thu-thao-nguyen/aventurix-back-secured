@@ -185,14 +185,15 @@ MongoDB Compass
 
 
 
-2. Vercel : se préparer le code backend avant de déployer sur Vercel :
-- api/index.js : créer dossier api → copier index.js dedans. 
-Modifier index.js : changer ./ vers ../, ajouter la ligne app.set("trust proxy", 1);, remplacer app.listen(..) par module.exports = app;
-index.js (racine) : sert à lancer le serveur uniquement en local
-api/index.js : sert à exporter l'app pour Vercel (sans app.listen())
-- public/index.html : ajouter index.html dans public
-- vercel.json : ajouter ce fichier à la racine du projet. e fichier dit à Vercel : « Quand quelqu’un appelle une route, envoie tout vers /api, où se trouve mon backend. » (ex: /login → /api/login)
-- database.js : modifier mongoUriAtlas (DB_USER / DB_PWD sera définies sur Vercel)
+2. Déployer un backend Express sur Vercel (sans front intégré)
+/api
+   index.js         ← contient TOUT le code Express (sans app.listen)
+/public
+   index.html       ← page affichée sur /
+index.js            ← sert à lancer le serveur uniquement en local
+vercel.json         ← fichier de configuration Vercel : lancer api/index.js comme serveur Node + toutes les routes vont vers Express
+database.js         ← modifier mongoUriAtlas (DB_USER / DB_PWD sera définies sur Vercel)
+
 
 app.set("trust proxy", 1); ???
 [ Navigateur ]
