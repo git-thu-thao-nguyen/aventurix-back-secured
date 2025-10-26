@@ -34,7 +34,7 @@ const app = express();
 // Middlewares
 // ==========================
 
-const port = 3000;
+// const port = 3000;
 app.use(morgan("dev")); // log des requêtes dans le terminal
 app.use(bodyParser.urlencoded({ extended: false })); // lire les formulaires HTML (x-www-form-urlencoded) du body
 app.use(bodyParser.json()); // lire le JSON du body
