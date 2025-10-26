@@ -104,16 +104,18 @@ app.use(cors(corsOptions)); // activation du middleware CORS pour toutes les rou
 // ==========================
 // Se connecter à la bdd
 // ==========================
-connectToDatabase();
+// Connexion obligatoire avant d'atteindre les routes
 app.use(async (req, res, next) => {
-    // Connexion obligatoire avant d'atteindre les routes
-    await connectToDatabase();
-    next();
+    try {
+        await connectToDatabase();
+        next();
+    } catch (err) {
+        console.log("DB connection error:", err.message);
+        return res.status(500).send("Database connection error");
+    }
 });
 
-// ==========================
 // Endpoints
-// ==========================
 app.use("/orders", orderRoutes);
 app.use("/advisers", adviserRoutes);
 app.use("/agencies", agencyRoutes);
@@ -122,11 +124,7 @@ app.use("/auth", authRoutes)
 app.use("/profile", profileRoutes);
 app.use("/create-checkout-session", checkoutRoutes);
 
-
-
-// ==========================
 // Routes non trouvées
-// ==========================
 app.use((req, res) => {
     return res.status(404).send("Page not found");
 });
