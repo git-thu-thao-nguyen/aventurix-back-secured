@@ -3,4 +3,4 @@
 
 const app = require("./api/index.js");
 const port = 3000;
-app.listen(port, () => console.log("Local server on", port));
+app.listen(port, () => console.log("Local server running on port", port));
