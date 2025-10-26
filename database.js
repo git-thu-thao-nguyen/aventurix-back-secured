@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
-const mongoUriAtlas = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@cluster0.o1hxbyo.mongodb.net/?retryWrites=true&w=majority&appName=aventurix`;
-const mongoUriLocalhost = `mongodb://localhost:27017/aventurix`;
 const dbName = "aventurix";
+
+const mongoUriLocalhost = `mongodb://localhost:27017/${dbName}`;
+
+const mongoUriAtlas = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}@cluster0.o1hxbyo.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`;
 
 let mongoUri = ``;
 

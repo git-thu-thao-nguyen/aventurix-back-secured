@@ -144,12 +144,55 @@ express-mongo-sanitize :
 
 
 
-Vercel : se préparer le code backend avant de déployer sur Vercel :
-1. /api/index.js : créer dossier api → copier index.js dedans. 
-Modifier index.js : changer ./ vers ../, ajouter app.set("trust proxy", 1);
-2. /public/index.html : ajouter index.html dans public
-3. /vercel.json : ajouter ce fichier à la racine du projet. e fichier dit à Vercel : « Quand quelqu’un appelle une route, envoie tout vers /api, où se trouve mon backend. » (ex: /login → /api/login)
-4. /database.js : modifier mongoUriAtlas (DB_USER / DB_PWD sera définies sur Vercel)
+MongoDB Atlas
+Organisation
+│
+├─ Projet 1
+│   ├─ Cluster A
+│   │   ├─ Base de données X
+│   │   │   ├─ Collection 1 (utilisateurs)
+│   │   │   │   └─ Document : { nom: "Alice", email: "alice@mail.com" }
+│   │   │   └─ Collection 2 (commandes)
+│   │   └─ Base de données Y
+│   └─ Cluster B (Backup / Réplica / Sauvegarde)
+│
+└─ Projet 2
+    └─ Cluster C (Développement / Test)
+
+
+
+
+
+
+
+
+
+DEPLOYER : 
+
+1. MongoDB Atlas
+- Créer un projet (Aventurix)-> créer un cluster (aws)
+- Dans Database Users : créer un utilisateur de base de données (Built-in Role: Read and write to any database) (aventurix-admin)
+Copier user + mdp, coller quelque part pour utiliser plus tard
+- Dans Network Access → Add IP Address → Choisir : Allow Access From Anywhere
+Pourquoi Autoriser toutes les IP ? : On autorise 0.0.0.0/0 dans MongoDB Atlas parce que les plateformes comme Vercel n’ont pas d’IP fixe.
+La sécurité reste assurée grâce aux identifiants de l’utilisateur MongoDB.
+MongoDB Compass
+- Atlas : venir dans Cluster → Connect → Compass → Copy the connection string, then open MongoDB Compass
+- Compass : New Connection → coller le lien + changer mdp → Save & Connect (cette étape, on se connect en distanciel à la bdd qui est sur cloud)
+- Compass : Create Database (Collection Name name = aventurix, Collection Name = advisers) (cette étape, on fait comme déjà fait sur localhost)
+- Compass : importer des données par collection
+- Atlas : recheck les collections sur Atlas dans Cluster → Browse Collections
+
+
+
+2. Vercel : se préparer le code backend avant de déployer sur Vercel :
+- api/index.js : créer dossier api → copier index.js dedans. 
+Modifier index.js : changer ./ vers ../, ajouter la ligne app.set("trust proxy", 1);, remplacer app.listen(..) par module.exports = app;
+index.js (racine) : sert à lancer le serveur uniquement en local
+api/index.js : sert à exporter l'app pour Vercel (sans app.listen())
+- public/index.html : ajouter index.html dans public
+- vercel.json : ajouter ce fichier à la racine du projet. e fichier dit à Vercel : « Quand quelqu’un appelle une route, envoie tout vers /api, où se trouve mon backend. » (ex: /login → /api/login)
+- database.js : modifier mongoUriAtlas (DB_USER / DB_PWD sera définies sur Vercel)
 
 app.set("trust proxy", 1); ???
 [ Navigateur ]

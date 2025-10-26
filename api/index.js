@@ -124,6 +124,8 @@ app.use((req, res) => {
 // ==========================
 // Se connecter au serveur
 // ==========================
-app.listen(port, () => {
-    console.log(`Aventurix server running on port ${port}`)
-});
+// app.listen(port, () => {
+//     console.log(`Aventurix server running on port ${port}`)
+// });
+
+module.exports = app;
