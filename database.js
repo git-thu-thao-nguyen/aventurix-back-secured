@@ -1,32 +1,45 @@
 const mongoose = require("mongoose");
 
 const dbName = "aventurix";
-
 const mongoUriLocalhost = `mongodb://localhost:27017/${dbName}`;
+const mongoUriAtlas = process.env.MONGODB_URI;
 
-const mongoUriAtlas = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PWD}/${dbName}@cluster0.o1hxbyo.mongodb.net/?retryWrites=true&w=majority`;
+// Cache global pour Vercel (évite de reconnecter à chaque requête)
+let cached = global.mongoose;
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
 
-let mongoUri = ``;
 
-const connectToDatabase = async () => {
+async function connectToDatabase() {
 
-    if (process.env.NODE_ENV === "production") {
-        mongoUri = mongoUriAtlas;
-    } else {
-        mongoUri = mongoUriLocalhost;
+    // Déjà connecté → réutiliser la connexion
+    if (cached.conn) return cached.conn;
+
+    // Choisir l’URI en fonction de l’environnement
+    const mongoUri =
+        process.env.NODE_ENV === "production"
+            ? mongoUriAtlas
+            : mongoUriLocalhost;
+
+    if (!mongoUri) {
+        throw new Error("No MongoDB URI found. Check environment variables.");
     }
 
-    try {
-        await mongoose.connect(mongoUri, {
-            dbName: dbName,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            tls: process.env.NODE_ENV === "production",
-        });
-        console.log("Connecting to database successful");
-    } catch (error) {
-        console.log("Error connecting to database", error);
+    // Première connexion → créer la promesse
+    if (!cached.promise) {
+        mongoose.set("strictQuery", true);
+        cached.promise = mongoose.connect(mongoUri, {
+            bufferCommands: false,
+            serverSelectionTimeoutMS: 8000,
+            maxPoolSize: 10,
+        }).then((mongoose) => mongoose);
     }
+
+    // Attendre la connexion et la stocker
+    cached.conn = await cached.promise;
+    console.log("MongoDB connected:", process.env.NODE_ENV);
+    return cached.conn;
 
 }
 
