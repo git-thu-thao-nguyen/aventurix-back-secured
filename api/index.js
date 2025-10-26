@@ -105,7 +105,11 @@ app.use(cors(corsOptions)); // activation du middleware CORS pour toutes les rou
 // Se connecter à la bdd
 // ==========================
 connectToDatabase();
-
+app.use(async (req, res, next) => {
+    // Connexion obligatoire avant d'atteindre les routes
+    await connectToDatabase();
+    next();
+});
 
 // ==========================
 // Endpoints
