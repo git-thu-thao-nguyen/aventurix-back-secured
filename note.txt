@@ -27,6 +27,7 @@ Réponse HTTP (JSON)
 
 
 
+
 Express (req / res / next()) :
 [ Utilisateur ]
         ↓  
@@ -66,7 +67,6 @@ Envoie le token dans chaque requête (headers: Authorization: Bearer <token>)
      ↓
 ✅ Si valide → autorise la requête
 ❌ Si expiré / invalide → renvoie 401 (Unauthorized)
-
 
 
 
@@ -115,6 +115,7 @@ xss-clean intercepte et nettoie : "<script>" → "&lt;script&gt;"
 
 
 
+
 Helmet : 
 [ Requête navigateur ]
         ↓
@@ -128,6 +129,7 @@ Helmet :
 
 
 
+
 express-mongo-sanitize :
 [ Requête du client ] → injecte des opérateurs MongoDB ($, .) pour manipuler/contourner les requêtes de bdd
      ↓
@@ -138,3 +140,44 @@ express-mongo-sanitize :
   { "user": "admin" }
      ↓
 [ Requête MongoDB sécurisée ]
+
+
+
+
+Vercel : se préparer le code backend avant de déployer sur Vercel :
+1. /api/index.js : créer dossier api → copier index.js dedans. 
+Modifier index.js : changer ./ vers ../, ajouter app.set("trust proxy", 1);
+2. /public/index.html : ajouter index.html dans public
+3. /vercel.json : ajouter ce fichier à la racine du projet. e fichier dit à Vercel : « Quand quelqu’un appelle une route, envoie tout vers /api, où se trouve mon backend. » (ex: /login → /api/login)
+4. /database.js : modifier mongoUriAtlas (DB_USER / DB_PWD sera définies sur Vercel)
+
+app.set("trust proxy", 1); ???
+[ Navigateur ]
+   │
+   │ envoie une requête HTTPS
+   ↓ 
+[ Vercel ] (héberge + sécurise)
+   │
+   │ transmet la requête en HTTP interne + dit "c’était bien HTTPS" 
+   ↓
+[ Serveur Express ]
+   │
+   ↓
+[ MongoDB Atlas ]
+
+app.set("trust proxy", 1)
+→ Dit à Express : "La connexion était sécurisée, tu peux faire confiance."
+
+Vercel = une plateforme qui héberge l'application web. Concrètement, Vercel fait 3 choses :
++ héberge le site: le code est envoyé sur leurs serveurs → le site devient accessible via une URL.
++ gère le HTTPS automatiquement : Pas besoin d’acheter un certificat SSL. Pas besoin de configurer la sécurité nous-même.
++ joue le rôle de “proxy” entre le client et le serveur Express. Vercel est un intermédiaire qui : reçoit la requête, ajoute des infos utiles (comme l’IP réelle du client), puis transmet au serveur Express.
+
+- Vercel transmet la requête au serveur Express. La connexion entre Vercel et Express n’a pas besoin d’être HTTPS. Elle se fait en HTTP interne (c’est normal et sécurisé → c’est un réseau interne)
+- Maintenant, Express reçoit HTTP (interne). Et Express pourrait se tromper : "Ah ! C’est du HTTP → donc pas sécurisé → je bloque les cookies secure et je considère l’IP que je vois comme étant la vraie (alors que c’est celle du proxy)"
+- Pourquoi trust proxy ? Parce que Vercel DONNE l’info à Express dans un header spécial : X-Forwarded-Proto: https
+Mais Express ne fait pas confiance par défaut. Alors on écrit : app.set("trust proxy", 1);
+Ce qui veut dire : "La connexion était sécurisée, tu peux faire confiance."
+
+
+

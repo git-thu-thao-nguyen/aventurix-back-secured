@@ -12,14 +12,14 @@ const xssClean = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 
-const connectToDatabase = require("./database");
-const orderRoutes = require("./routes/order.routes");
-const adviserRoutes = require("./routes/adviser.routes");
-const agencyRoutes = require("./routes/agency.routes");
-const tripRoutes = require("./routes/trips.routes");
-const authRoutes = require("./routes/auth.routes");
-const profileRoutes = require("./routes/profile.routes");
-const checkoutRoutes = require("./routes/checkout.routes");
+const connectToDatabase = require("../database");
+const orderRoutes = require("../routes/order.routes");
+const adviserRoutes = require("../routes/adviser.routes");
+const agencyRoutes = require("../routes/agency.routes");
+const tripRoutes = require("../routes/trips.routes");
+const authRoutes = require("../routes/auth.routes");
+const profileRoutes = require("../routes/profile.routes");
+const checkoutRoutes = require("../routes/checkout.routes");
 const { StatusCodes } = require("http-status-codes");
 
 
@@ -42,6 +42,7 @@ dotenv.config();
 app.use(helmet()); // ajoute auto des headers de sécurité dans toutes les réponses HTTP
 app.use(xssClean()); // supprimer les balises ou scripts dangereux (protection contre les attaques XSS)
 app.use(mongoSanitize({ replaceWith: "_" })); // remplace les opérateurs MongoDB ($ et .) par un underscore (_) 
+app.set("trust proxy", 1); // indique à Express d'accepter les infos du proxy (Vercel)
 
 // Config multer :
 // sans multer → Express ne comprend pas les fichiers dans multipart/form-data
