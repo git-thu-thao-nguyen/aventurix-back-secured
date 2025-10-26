@@ -22,6 +22,7 @@ const profileRoutes = require("../routes/profile.routes");
 const checkoutRoutes = require("../routes/checkout.routes");
 const { StatusCodes } = require("http-status-codes");
 
+const path = require("path");
 
 // ==========================
 // Instance
@@ -42,7 +43,13 @@ dotenv.config();
 app.use(helmet()); // ajoute auto des headers de sécurité dans toutes les réponses HTTP
 app.use(xssClean()); // supprimer les balises ou scripts dangereux (protection contre les attaques XSS)
 app.use(mongoSanitize({ replaceWith: "_" })); // remplace les opérateurs MongoDB ($ et .) par un underscore (_) 
+
+// Vercel
 app.set("trust proxy", 1); // indique à Express d'accepter les infos du proxy (Vercel)
+app.use(express.static(path.join(__dirname, "../public")));
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/index.html"));
+});
 
 // Config multer :
 // sans multer → Express ne comprend pas les fichiers dans multipart/form-data
@@ -127,5 +134,6 @@ app.use((req, res) => {
 // app.listen(port, () => {
 //     console.log(`Aventurix server running on port ${port}`)
 // });
+
 
 module.exports = app;
