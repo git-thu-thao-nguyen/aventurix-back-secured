@@ -1,23 +1,33 @@
 # 🪐 Aventurix
 
+🌐 **[Voir le site en ligne](https://aventurix.netlify.app/)**  
+
+
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
 
-🌐 **[aventurix.netlify.app](https://aventurix.netlify.app/)**  
+**Aventurix** — application web MERN pour la gestion et la réservation de voyages.
 
+**Fonctionnalités principales :**
+- Paiements sécurisés via Stripe
+- Authentification JWT
+- Gestion des offres de voyage
+- Historique des réservations
 
-Bienvenue sur **Aventurix** — application web complète (Front + Back) permettant la gestion et la réservation de voyages.
-
-Architecture MERN avec une intégration Stripe pour les paiements et un système d'authentification JWT sécurisé.
-
-Auteure : Thu Thao NGUYEN  
+**Améliorations futures :**
+- Création d’un système de favoris pour sauvegarder des offres
+- Tableau de bord admin avec statistiques de ventes
 
 ---
 
-## Architecture Aventurix
+## Architecture app
 
 
 ```
@@ -84,3 +94,8 @@ En production (Cloud)
 ──────────────────────────────────────────────────────────────
 [ FRONT ] : Axios intercepte la réponse → met à jour l'UI React
 ```
+
+
+## 📸 Aperçu visuel
+
+![App Demo](./public/app-demo.webp)

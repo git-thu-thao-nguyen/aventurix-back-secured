@@ -185,7 +185,7 @@ MongoDB Compass
 
 
 
-2. Déployer un backend Express sur Vercel (sans front intégré)
+2. Backend Express sur Vercel (sans front intégré)
 /api
    index.js         ← contient TOUT le code Express (sans app.listen)
 /public
@@ -225,3 +225,8 @@ Ce qui veut dire : "La connexion était sécurisée, tu peux faire confiance."
 
 
 
+2. Frontend sur Netlify
+- public/_redirects : créer fichier _redirects : /* /index.html 200
+Dans une SPA, toutes les routes sont gérées par React côté navigateur.
+Si on recharge une page comme /profile, Netlify ne trouve pas cette route et renverrait une 404.
+Le fichier _redirects force Netlify à renvoyer toujours index.html, ce qui permet à React Router d’afficher la bonne page.
