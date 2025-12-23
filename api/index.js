@@ -81,6 +81,7 @@ app.use(rateLimit(limitOptions)); // activation du middleware de limitation de d
 
 // Config cors
 const allowedOrigins = [
+    "https://aventurix.fr",
     "https://aventurix.netlify.app",
     "http://localhost:5173"
 ];

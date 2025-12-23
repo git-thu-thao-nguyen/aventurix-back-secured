@@ -57,7 +57,7 @@ Renvoie le token au front
 --------------------------------------------
 [ Front (React) ]
      ↓
-Stocke le token (ex: localStorage ou cookies)
+Stocke le token (ex: localStorage - Pas recommandé ou cookies HTTPOnly - Recommandé)
      ↓
 Envoie le token dans chaque requête (headers: Authorization: Bearer <token>)
 --------------------------------------------
